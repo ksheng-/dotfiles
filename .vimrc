@@ -5,8 +5,19 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-syntastic/syntastic'
 Plug 'Valloric/YouCompleteMe'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'jremmen/vim-ripgrep'
+Plug 'vim-airline/vim-airline'
+
+Plug 'rhysd/vim-clang-format'
 Plug 'rust-lang/rust.vim'
-Plug 'vim-scripts/AddIfndefGuard'
+
+Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'Quramy/tsuquyomi'
+Plug 'mxw/vim-jsx'
 
 call plug#end()
 
