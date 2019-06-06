@@ -4,6 +4,7 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
 Plug 'vim-syntastic/syntastic'
 Plug 'Valloric/YouCompleteMe'
 " Plug 'ervandew/supertab'
@@ -43,6 +44,10 @@ let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
 let g:syntastic_typescript_checkers=['tsuquyomi']
 
+let g:syntastic_python_checkers=['flake8']
+" let g:syntastic_python_flake8_args='--ignore=E203,E266,E501,W503 --max-line-length=80 --max-complexity=18, --select=B,C,E,F,W,T4,B9'
+let g:syntastic_always_populate_loc_list=1
+
 let g:tsuquyomi_disable_quickfix=1
 let g:tsuquyomi_completion_detail=1
 
@@ -51,16 +56,19 @@ let g:airline#extensions#tabline#enabled=1
 let g:airline_theme='dracula'
 
 let g:clang_format#auto_format=0
+
 " autocmd BufWritePre *.py execute ':Black'
 autocmd FileType python nmap <buffer> <Leader>p :Black<CR>
+let g:black_linelength=88
 
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
 map <leader>n :NERDTreeFocus<CR>
 map <leader>N :NERDTreeToggle<CR>
 map <leader>b :Buffer<CR>
 map <leader>B :b#<CR>
-map <leader>f :Files<CR>
+map <leader>f :GFiles<CR>
+map <leader>F :Files<CR>
 map <leader>g :Find<CR>
 
 autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
