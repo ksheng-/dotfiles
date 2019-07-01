@@ -31,12 +31,14 @@ Plug 'mxw/vim-jsx'
 
 call plug#end()
 
-set smarttab
 set expandtab
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set shiftround
+
+au FileType css,scss,less set tabstop=2 softtabstop=2 shiftwidth=2
+au BufNewFile,BufRead *.html set filetype=htmldjango
 
 set number
 set ruler
@@ -67,9 +69,9 @@ let g:airline_theme='hybrid'
 let g:clang_format#auto_format=0
 
 " autocmd BufWritePre *.py execute ':Black'
-nmap <buffer> <Leader>p :Autoformat<CR>
+nmap <Leader>p :Autoformat<CR>
 autocmd FileType python nmap <buffer> <Leader>p :Black<CR>
-autocmd FileType sql nmap <Leader>p :%!pg_format - <CR>
+autocmd FileType sql nmap <buffer> <Leader>p :%!pg_format - <CR>
 let g:black_linelength=88
 
 command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
