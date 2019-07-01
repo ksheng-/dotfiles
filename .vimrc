@@ -46,10 +46,11 @@ set visualbell
 set wildmode=longest,list
 set hidden
 
+set background=dark
 colorscheme gruvbox
 set termguicolors
 
-let g:hybrid_custom_term_colors = 1
+" let g:hybrid_custom_term_colors = 1
 " let g:hybrid_reduced_contrast = 1 " Remove this line if using the default palette.
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'

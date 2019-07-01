@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/sheng/.oh-my-zsh"
+export ZSH="/home/sheng/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -70,10 +70,11 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
     git
-    osx
     dotenv
     zsh-completions
 )
+
+ZSH_DISABLE_COMPFIX=true
 
 source $ZSH/oh-my-zsh.sh
 
@@ -103,8 +104,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias python=python3
-alias pip=pip3
+alias pip=pip3.7
+alias python=python3.7
 alias q='qhome=~/q rlwrap -r ~/q/m64/q'
 export qhome=~/q
 
@@ -117,3 +118,7 @@ export qhome=~/q
 # --glob: additional conditions for search (in this case ignore everything in the .git/ folder)
 
 export fzf_default_command='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
