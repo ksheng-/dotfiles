@@ -1,34 +1,42 @@
 call plug#begin('~/.vim/bundle')
 
+" colors
 Plug 'flazz/vim-colorschemes'
 Plug 'noahfrederick/vim-noctu'
 Plug 'w0ng/vim-hybrid'
-Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/nerdtree'
+
+" navigations + status
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
-Plug 'vim-syntastic/syntastic'
-Plug 'Valloric/YouCompleteMe'
-" Plug 'ervandew/supertab'
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+" autocomplete
+Plug 'Valloric/YouCompleteMe'
+" Plug 'ervandew/supertab'
+
+" formatting
 Plug 'rhysd/vim-clang-format'
 Plug 'python/black'
 Plug 'rust-lang/rust.vim'
 Plug 'Chiel92/vim-autoformat'
-
 Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+
+" linting
+Plug 'vim-syntastic/syntastic'
 Plug 'Quramy/tsuquyomi'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'mxw/vim-jsx'
 
+" writing
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'tpope/vim-abolish'
@@ -54,13 +62,24 @@ set background=dark
 colorscheme gruvbox
 set termguicolors
 
+function! s:patch_colors()
+    set background=dark
+    colorscheme gruvbox
+    set termguicolors
+    highlight ColorColumn ctermbg=gray
+    highlight LineNr ctermfg=grey
+    AirlineRefresh
+endfunction
+
+" autocmd! ColorScheme gruvbox call s:patch_colors()
+
 highlight ColorColumn ctermbg=gray
 highlight LineNr ctermfg=grey
 set colorcolumn=101
 
 " language specific whitespace
-au FileType html,htmldjango,css,scss,less set tabstop=2 softtabstop=2 shiftwidth=2
 au BufNewFile,BufRead *.html set filetype=htmldjango
+au FileType html,htmldjango,css,scss,less setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
 
 """ keybinds
@@ -92,27 +111,22 @@ map <leader>g :Find<CR>
 
 " code formatting
 nmap <Leader>p :Autoformat<CR>
-autocmd FileType python nmap <buffer> <Leader>p :Black<CR>
-autocmd FileType sql nmap <buffer> <Leader>p :%!pg_format - <CR>
-autocmd FileType htmldjango,html nmap <buffer> <Leader>p :%!js-beautify --type html --indent-size 2 -<CR>
-autocmd FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
+au FileType python nmap <buffer> <Leader>p :Black<CR>
+au FileType sql nmap <buffer> <Leader>p :%!pg_format - <CR>
+au BufEnter,BufNew *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html nmap <buffer> <Leader>p <Plug>(Prettier)
+au FileType typescript nmap <buffer> <Leader>t : <C-u>echo tsuquyomi#hint()<CR>
 
 
 """ syntax & formatting options
-" js
+let g:syntastic_python_checkers=['flake8']
+" let g:syntastic_python_flake8_args='--ignore=E203,E266,E501,W503 --max-line-length=80 --max-complexity=18, --select=B,C,E,F,W,T4,B9'
+let g:syntastic_always_populate_loc_list=1
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
 let g:syntastic_typescript_checkers=['tsuquyomi']
 let g:tsuquyomi_disable_quickfix=1
 let g:tsuquyomi_completion_detail=1
-
-" python
 let g:black_linelength=88
-let g:syntastic_python_checkers=['flake8']
-" let g:syntastic_python_flake8_args='--ignore=E203,E266,E501,W503 --max-line-length=80 --max-complexity=18, --select=B,C,E,F,W,T4,B9'
-let g:syntastic_always_populate_loc_list=1
-
-" other
 let g:clang_format#auto_format=0
 
 
@@ -130,14 +144,14 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 
 """ writing
 function! s:goyo_enter()
-  Limelight
-  colorscheme pencil
+    Limelight
+    colorscheme zenburn
 endfunction
 
 function! s:goyo_leave()
-  Limelight!
-  colorscheme gruvbox
+    Limelight!
+    colorscheme gruvbox
 endfunction
 
-autocmd! User GoyoEnter call <SID>goyo_enter()
-autocmd! User GoyoLeave call <SID>goyo_leave()
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
