@@ -1,3 +1,9 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 call plug#begin('~/.vim/bundle')
 
 " colors
@@ -9,6 +15,7 @@ Plug 'w0ng/vim-hybrid'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-eunuch'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -21,12 +28,27 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'Valloric/YouCompleteMe'
 " Plug 'ervandew/supertab'
 
-" formatting
+" formatting & syntax highlighting
+Plug 'katusk/vim-qkdb-syntax'
 Plug 'rhysd/vim-clang-format'
 Plug 'python/black'
 Plug 'rust-lang/rust.vim'
 Plug 'Chiel92/vim-autoformat'
-Plug 'prettier/vim-prettier', { 'do': 'yarn install' }
+Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': [
+    \ 'javascript',
+    \ 'typescript',
+    \ 'css',
+    \ 'less',
+    \ 'scss',
+    \ 'json',
+    \ 'graphql',
+    \ 'markdown',
+    \ 'vue',
+    \ 'lua',
+    \ 'php',
+    \ 'ruby',
+    \ 'html',
+    \ 'swift' ] }
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 
@@ -79,7 +101,7 @@ set colorcolumn=101
 
 " language specific whitespace
 au BufNewFile,BufRead *.html set filetype=htmldjango
-au FileType html,htmldjango,css,scss,less setlocal tabstop=2 softtabstop=2 shiftwidth=2
+au FileType javascript,html,htmldjango,css,scss,less setlocal tabstop=2 softtabstop=2 shiftwidth=2
 
 
 """ keybinds
@@ -94,7 +116,8 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-nnoremap <silent> <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+nnoremap <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <Bar> :unlet _s <CR>
+nnoremap <F6> :setl noai nocin nosi inde= <CR>
 
 noremap <Up> <NOP>
 noremap <Down> <NOP>
@@ -131,7 +154,7 @@ let g:clang_format#auto_format=0
 
 
 """ fzf + rg
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --ignore --hidden --follow --glob "!{.git,node_modules,env,venv}/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
 
 """ misc config
