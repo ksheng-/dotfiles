@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/sheng/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -106,8 +106,12 @@ source $ZSH/oh-my-zsh.sh
 
 alias pip=pip3.7
 alias python=python3.7
-alias q='qhome=~/q rlwrap -r ~/q/m64/q'
-export qhome=~/q
+
+alias qp='cd $HOME/Quant-prod/python_scripts'
+export PYTHONPATH=$HOME/Quant-prod/python_scripts:$PYTHONPATH
+
+alias ehg='cat /etc/hosts | grep'
+alias hg='history | grep'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -118,6 +122,9 @@ export qhome=~/q
 # --glob: additional conditions for search (in this case ignore everything in the .git/ folder)
 
 export fzf_default_command='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+export FZF_COMPLETION_TRIGGER=''
+bindkey '^T' fzf-completion
+bindkey '^I' $fzf_default_completion
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
