@@ -1,6 +1,6 @@
 if empty(glob('~/.vim/autoload/plug.vim'))
     silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+                \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -35,22 +35,23 @@ Plug 'python/black'
 Plug 'rust-lang/rust.vim'
 Plug 'Chiel92/vim-autoformat'
 Plug 'prettier/vim-prettier', { 'do': 'yarn install', 'for': [
-    \ 'javascript',
-    \ 'typescript',
-    \ 'css',
-    \ 'less',
-    \ 'scss',
-    \ 'json',
-    \ 'graphql',
-    \ 'markdown',
-    \ 'vue',
-    \ 'lua',
-    \ 'php',
-    \ 'ruby',
-    \ 'html',
-    \ 'swift' ] }
+            \ 'javascript',
+            \ 'typescript',
+            \ 'css',
+            \ 'less',
+            \ 'scss',
+            \ 'json',
+            \ 'graphql',
+            \ 'markdown',
+            \ 'vue',
+            \ 'lua',
+            \ 'php',
+            \ 'ruby',
+            \ 'html',
+            \ 'swift' ] }
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'patmok/qvim'
 
 " linting
 Plug 'vim-syntastic/syntastic'
@@ -134,6 +135,11 @@ map <leader>g :Find<CR>
 
 " code formatting
 nmap <Leader>p :Autoformat<CR>
+if exists(':Black')
+    au FileType python nmap <buffer> <Leader>p :Black<CR>
+else
+    au FileType python nmap <buffer> <Leader>p :%!black -q - <CR>
+endif
 au FileType python nmap <buffer> <Leader>p :Black<CR>
 au FileType sql nmap <buffer> <Leader>p :%!pg_format - <CR>
 au BufEnter,BufNew *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html nmap <buffer> <Leader>p <Plug>(Prettier)
