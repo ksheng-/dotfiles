@@ -2,6 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
+DISABLE_MAGIC_FUNCTIONS=true
 export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
@@ -110,7 +111,8 @@ alias python=python3.7
 alias qp='cd $HOME/Quant-prod/python_scripts'
 export PYTHONPATH=$HOME/Quant-prod/python_scripts:$PYTHONPATH
 
-alias ehg='cat /etc/hosts | grep'
+alias eh='cat ~/backend-fabric/etc/hosts'
+alias ehg='cat ~/backend-fabric/etc/hosts | grep'
 alias hg='history | grep'
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -126,6 +128,31 @@ export FZF_COMPLETION_TRIGGER=''
 bindkey '^T' fzf-completion
 bindkey '^I' $fzf_default_completion
 
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export PATH="/usr/local/opt/postgresql@9.4/bin:$PATH"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+export SFX_CONFIG_FILE=~/INT_NY4.ini
+
+_zones() {
+    sed -n '/^;; Fenics \/ FNFX Production/,$p' ~/internal-dns/db.prd.lucera.com | grep -v '^;' | sed '/^$/d' | awk '{if ($3 == "A") print $1, $NF}'
+}
+
+alias zones="cat <(_zones 2>null) <(grep -v '^\s*\(#\|$\)' ~/backend-fabric/etc/hosts 2>null) | fzf"
+
+alias sshf='ssh'
+_fzf_complete_sshf() {
+  _fzf_complete '+m' "$@" < <(
+    setopt localoptions nonomatch
+    command cat <(cat ~/.ssh/config ~/.ssh/config.d/* /etc/ssh/ssh_config 2> /dev/null | command grep -i '^host ' | command grep -v '[*?]' | awk '{for (i = 2; i <= NF; i++) print $1 " " $i}') \
+        <(command grep -oE '^[[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | tr -d '[' | awk '{ print $1 " " $1 }') \
+        <(command grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0') \
+        <(command grep -v '^\s*\(#\|$\)' ~/backend-fabric/etc/hosts 2>null) \
+        <(_zones 2>null) |
+        awk '{if (length($2) > 0) {print $2}}' | sort -u
+  )
+}
